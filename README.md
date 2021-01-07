@@ -6,8 +6,11 @@ Run the following
 
 **Output:**
 master fd 3
+
 slave fd 4
+
 **slave id /dev/pts/28**
+
 master id /dev/ptmx
 
 In another terminal, run
