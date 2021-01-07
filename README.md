@@ -5,6 +5,7 @@ Run the following
 > python serial_emulator.py
 
 **Example Output:**
+
 master fd 3
 
 slave fd 4
