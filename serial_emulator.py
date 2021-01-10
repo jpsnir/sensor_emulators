@@ -13,9 +13,30 @@ import threading
 import time 
 
 sample_time = 1
+new_line = "\n"
 
-def read_file():
-    print("Reads input file to be sent on pseudo serial port device")
+def read_file(master):
+    f = open('gps-data.txt', 'r') 
+    Lines = f.readlines()
+    for line in Lines:
+        #print(line)
+        #print('def')
+        line1 = line + '\r'
+        os.write(master,str.encode(line1))
+        time.sleep(sample_time) 
+    f.close()
+'''
+def read_file(master):
+    with open('test.txt', 'r') as reader:
+        line = reader.readline()
+        while line != '':
+            os.write(master,str.encode(line.rstrip('\n')))
+            os.write(master,str.encode(new_line.rstrip('\n')))
+            line = reader.readline()
+            time.sleep(sample_time)
+            
+    #print("Reads input file to be sent on pseudo serial port device")
+'''
     
 def test_serial():
     """Start the testing"""
@@ -32,10 +53,12 @@ def test_serial():
     count = 0
     try:
         while True:
+            read_file(master)
             #read_file() goes here
-            os.write(master,str.encode('count %d\r\n'%count)) 
-            count += 1
-            time.sleep(sample_time)
+            #os.write(master,str.encode('count %d\r\n'%count)) 
+            #count += 1
+            
+            
     except KeyboardInterrupt:
         print("Terminated")
         pass
