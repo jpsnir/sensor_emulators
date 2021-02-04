@@ -1,5 +1,7 @@
 1. Clone the repository
-Python 3.7 tested
+Python >= 2.7 tested
+Dependencies: pyserial
+Do pip install pyserial
 Run the following
 
 > python serial_emulator.py --type gps --file gps-data.txt --sample_time 1
