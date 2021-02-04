@@ -37,7 +37,7 @@ class SerialEmulator:
         self.master,self.slave = pty.openpty() #open the pseudoterminal
         #print("master fd %s"%self.master)
         #print("slave fd %s"%slave)
-        print("The Pseduo device address: %s"%os.ttyname(self.slave))
+        print("The Pseudo device address: %s"%os.ttyname(self.slave))
         #print("master id %s"%os.ttyname(self.master))
         try:
             while True:
