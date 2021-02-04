@@ -11,64 +11,61 @@ import os, pty
 from serial import Serial
 import threading
 import time 
+import argparse
 
-sample_time = 1
-new_line = "\n"
-
-def read_file(master):
-    f = open('gps-data.txt', 'r') 
-    Lines = f.readlines()
-    for line in Lines:
-        #print(line)
-        #print('def')
-        line1 = line + '\r'
-        os.write(master,str.encode(line1))
-        time.sleep(sample_time) 
-    f.close()
-'''
-def read_file(master):
-    with open('test.txt', 'r') as reader:
-        line = reader.readline()
-        while line != '':
-            os.write(master,str.encode(line.rstrip('\n')))
-            os.write(master,str.encode(new_line.rstrip('\n')))
-            line = reader.readline()
-            time.sleep(sample_time)
-            
-    #print("Reads input file to be sent on pseudo serial port device")
-'''
+class SerialEmulator:
     
-def test_serial():
-    """Start the testing"""
-    master,slave = pty.openpty() #open the pseudoterminal
-    s_name = os.ttyname(slave) #translate the slave fd to a filename
-    ser = Serial(s_name, 9600, timeout=1)
-    print("master fd %s"%master)
-    print("slave fd %s"%slave)
-    print("slave id %s"%s_name)
-    print("master id %s"%os.ttyname(master))
+    def __init__(self,type,file,sample_time):
+        self.sample_time = sample_time 
+        self.type = type 
+        self.file = file 
+        self.master = None
+        
+    def write_file_to_pt(self):
+        f = open(self.file, 'r') 
+        Lines = f.readlines()
+        for line in Lines:
+            #print(line)
+            #print('def')
+            line1 = line + '\r'
+            os.write(self.master,str.encode(line1))
+            time.sleep(self.sample_time) 
+        f.close()
     
-    #create a separate thread that listens on the master device for commands
-
-    count = 0
-    try:
-        while True:
-            read_file(master)
-            #read_file() goes here
-            #os.write(master,str.encode('count %d\r\n'%count)) 
-            #count += 1
-            
-            
-    except KeyboardInterrupt:
-        print("Terminated")
-        pass
-    #open a pySerial connection to the slave
+    def emulate_device(self):
+        """Start the testing"""
+        self.master,self.slave = pty.openpty() #open the pseudoterminal
+        #print("master fd %s"%self.master)
+        #print("slave fd %s"%slave)
+        print("The Pseduo device address: %s"%os.ttyname(self.slave))
+        #print("master id %s"%os.ttyname(self.master))
+        try:
+            while True:
+                self.write_file_to_pt()
+                
+        except KeyboardInterrupt:
+            os.close(self.master)
+            os.close(self.slave)
+            print("Terminated")
+            pass
     
-
+    def start_emulator(self):
+        self.emulate_device()
+    
 if __name__=='__main__':
     
     # Some argument parsing required
     # arguments : filepath,baudrate,parity bits, hardware control, 
     # data output rate etc.
-    
-    test_serial()
+    parser = argparse.ArgumentParser(description='Command line options for Serial emulator.\
+                                     Press Ctrl-C to stop execution')
+    parser.add_argument('--type','-t', default='gps', dest='sim_type',type=str,
+                        metavar='gps or imu',choices=['gps','imu'],
+                        help='select type of serial emulator')
+    parser.add_argument('-f','--file', required=True, type=str, dest='file',
+                    help='sum the integers (default: find the max)')
+    parser.add_argument('-s','--sample_time', default = 1, type=int, dest='sample_time',
+                    metavar='value',help='input sample time in seconds')
+    args = parser.parse_args()
+    se = SerialEmulator(args.sim_type,args.file,args.sample_time)
+    se.start_emulator()
