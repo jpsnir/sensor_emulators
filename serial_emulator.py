@@ -25,38 +25,33 @@ class SerialEmulator:
         f = open(self.file, 'r') 
         Lines = f.readlines()
         for line in Lines:
-            #print(line)
-            #print('def')
             line1 = line + '\r'
             os.write(self.master,str.encode(line1))
             time.sleep(self.sample_time) 
         f.close()
     
     def emulate_device(self):
-        """Start the testing"""
+        """Start the emulator"""
         self.master,self.slave = pty.openpty() #open the pseudoterminal
-        #print("master fd %s"%self.master)
-        #print("slave fd %s"%slave)
         print("The Pseudo device address: %s"%os.ttyname(self.slave))
-        #print("master id %s"%os.ttyname(self.master))
         try:
             while True:
                 self.write_file_to_pt()
                 
         except KeyboardInterrupt:
-            os.close(self.master)
-            os.close(self.slave)
-            print("Terminated")
+            self.stop_simulator()
             pass
     
     def start_emulator(self):
         self.emulate_device()
+
+    def stop_simulator(self):
+        os.close(self.master)
+        os.close(self.slave)
+        print("Terminated")
+        
     
 if __name__=='__main__':
-    
-    # Some argument parsing required
-    # arguments : filepath,baudrate,parity bits, hardware control, 
-    # data output rate etc.
     parser = argparse.ArgumentParser(description='Command line options for Serial emulator.\
                                      Press Ctrl-C to stop execution')
     parser.add_argument('--type','-t', default='gps', dest='sim_type',type=str,
