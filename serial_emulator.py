@@ -63,8 +63,8 @@ if __name__=='__main__':
                         metavar='gps or imu',choices=['gps','imu'],
                         help='select type of serial emulator')
     parser.add_argument('-f','--file', required=True, type=str, dest='file',
-                    help='sum the integers (default: find the max)')
-    parser.add_argument('-s','--sample_time', default = 1, type=int, dest='sample_time',
+                    help='data file to simulate device')
+    parser.add_argument('-s','--sample_time', default = 1, type=float, dest='sample_time',
                     metavar='value',help='input sample time in seconds')
     args = parser.parse_args()
     se = SerialEmulator(args.sim_type,args.file,args.sample_time)
