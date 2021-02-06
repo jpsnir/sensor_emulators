@@ -15,9 +15,8 @@ import argparse
 
 class SerialEmulator:
     
-    def __init__(self,type,file,sample_time):
-        self.sample_time = sample_time 
-        self.type = type 
+    def __init__(self,file,sample_time):
+        self.sample_time = sample_time  
         self.file = file 
         self.master = None
         
@@ -54,13 +53,10 @@ class SerialEmulator:
 if __name__=='__main__':
     parser = argparse.ArgumentParser(description='Command line options for Serial emulator.\
                                      Press Ctrl-C to stop execution')
-    parser.add_argument('--type','-t', default='gps', dest='sim_type',type=str,
-                        metavar='gps or imu',choices=['gps','imu'],
-                        help='select type of serial emulator')
     parser.add_argument('-f','--file', required=True, type=str, dest='file',
                     help='data file to simulate device')
     parser.add_argument('-s','--sample_time', default = 1, type=float, dest='sample_time',
                     metavar='value',help='input sample time in seconds')
     args = parser.parse_args()
-    se = SerialEmulator(args.sim_type,args.file,args.sample_time)
+    se = SerialEmulator(args.file,args.sample_time)
     se.start_emulator()
