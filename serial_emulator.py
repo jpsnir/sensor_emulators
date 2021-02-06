@@ -57,6 +57,10 @@ if __name__=='__main__':
                     help='data file to simulate device')
     parser.add_argument('-s','--sample_time', default = 1, type=float, dest='sample_time',
                     metavar='value',help='input sample time in seconds')
+    
     args = parser.parse_args()
+    if (args.sample_time <= 0):
+        print("sample time must be positive.Setting it to default 1 second")
+        args.sample_time = 1
     se = SerialEmulator(args.file,args.sample_time)
     se.start_emulator()

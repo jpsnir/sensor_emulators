@@ -6,9 +6,12 @@ Dependencies: pyserial
 Do pip install pyserial
 
 Run the following
+> python serial_emulator.py -h 
+displays help options and gives you the options to run the script. 
 
-> python serial_emulator.py --type gps --file gps-data.txt --sample_time 1
-
+> python serial_emulator.py --file <file> --sample_time <in seconds>
+file  is a .txt file which you want to send through a pseudo device, 
+sample_time is a positive number from (0,inf). 
 **Example Output:**
 
 The Pseduo device address: /dev/pts/*9* 
