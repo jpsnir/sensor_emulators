@@ -7,6 +7,7 @@ Do pip install pyserial
 
 Run the following
 > python serial_emulator.py -h 
+
 displays help options and gives you the options to run the script. 
 
 > python serial_emulator.py --file file --sample_time time
